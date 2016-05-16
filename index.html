@@ -284,6 +284,64 @@ group by product_code order by 1;
 </ul>
 </li>
 </ul>
+<h2 id="SQL-Server-examples"><a href="#SQL-Server-examples" class="headerlink" title="SQL Server examples"></a>SQL Server examples</h2><p>在 SQL Server 中， PIVOT 的语法和 Oracle 非常相似，但是要注意：</p>
+<ul>
+<li>T-SQL 中所有的 subquery 要加别名 AS [alias]</li>
+<li>IN 子句里的值要用中括号</li>
+<li>最外层 SELECT list 可以指定结果的列名(必须和IN子句一致)，还可以添加常量列，但Oracle似乎不支持。</li>
+</ul>
+<p>先看原表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> [AdventureWorks2012]<span class="keyword">go</span><span class="keyword">select</span> * <span class="keyword">from</span> [Production].[Product]<span class="keyword">go</span><span class="keyword">SELECT</span> DaysToManufacture, <span class="keyword">AVG</span>(StandardCost) <span class="keyword">AS</span> AverageCost <span class="keyword">FROM</span> Production.Product<span class="keyword">GROUP</span> <span class="keyword">BY</span> DaysToManufacture;</span><br></pre></td></tr></table></figure>
+<p>如果不指明select list：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> *<span class="keyword">from</span> ( <span class="keyword">select</span> DaysToManufacture, StandardCost	<span class="keyword">from</span> Production.Product)  <span class="keyword">AS</span> SourceTable<span class="keyword">PIVOT</span> (<span class="keyword">AVG</span>(StandardCost)  <span class="keyword">FOR</span> DaysToManufacture </span><br><span class="line"><span class="keyword">IN</span> ([<span class="number">0</span>],[<span class="number">1</span>],[<span class="number">2</span>],[<span class="number">3</span>],[<span class="number">4</span>])) <span class="keyword">AS</span> <span class="keyword">RESULT</span></span><br></pre></td></tr></table></figure>
+<p>结果是这样：</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.0885</td>
+<td>223.88</td>
+<td>359.1082</td>
+<td>NULL</td>
+<td>949.4105</td>
+</tr>
+</tbody>
+</table>
+<p>但是如果指明列头：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="string">'AverageCost'</span> <span class="keyword">AS</span> Cost_Sorted_By_Production_Days, [<span class="number">0</span>], [<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>]<span class="keyword">FROM</span>(<span class="keyword">SELECT</span> DaysToManufacture, StandardCost     <span class="keyword">FROM</span> Production.Product) <span class="keyword">AS</span> SourceTable<span class="keyword">PIVOT</span>(<span class="keyword">AVG</span>(StandardCost)<span class="keyword">FOR</span> DaysToManufacture <span class="keyword">IN</span> ([<span class="number">0</span>], [<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>])) <span class="keyword">AS</span> PivotTable;</span><br></pre></td></tr></table></figure>
+<p>结果是：</p>
+<table>
+<thead>
+<tr>
+<th>Cost_Sorted_By_Production_Days</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AverageCost</td>
+<td>5.0885</td>
+<td>223.88</td>
+<td>359.1082</td>
+<td>NULL</td>
+<td>949.4105</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Important</strong></p>
+<p>When aggregate functions are used with PIVOT, the presence of any null values in the value column are not considered when computing an aggregation.</p>
 <p>[^quote]: 本文基本上译自 <a href="https://oracle-base.com/articles/11g/pivot-and-unpivot-operators-11gr1" target="_blank" rel="external">https://oracle-base.com/articles/11g/pivot-and-unpivot-operators-11gr1</a>.     </p>
 
       
