@@ -51,9 +51,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://xueqiang.github.io"></form>
@@ -124,7 +124,24 @@ group by product_code order by 1;
 <p>如果需要行转列，把产品代码ABCD作为列头，传统做法是用DECODE函数：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">SUM</span>(<span class="keyword">DECODE</span>(product_code, <span class="string">'A'</span>, quantity, <span class="number">0</span>)) <span class="keyword">AS</span> a_sum_quantity,</span><br><span class="line">	       <span class="keyword">SUM</span>(<span class="keyword">DECODE</span>(product_code, <span class="string">'B'</span>, quantity, <span class="number">0</span>)) <span class="keyword">AS</span> b_sum_quantity,</span><br><span class="line">	       <span class="keyword">SUM</span>(<span class="keyword">DECODE</span>(product_code, <span class="string">'C'</span>, quantity, <span class="number">0</span>)) <span class="keyword">AS</span> c_sum_quantity,</span><br><span class="line">	       <span class="keyword">SUM</span>(<span class="keyword">DECODE</span>(product_code, <span class="string">'D'</span>, quantity, <span class="number">0</span>)) <span class="keyword">AS</span> d_sum_quantity</span><br><span class="line"><span class="keyword">FROM</span>   pivot_test</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> customer_id;</span><br></pre></td></tr></table></figure>
 <p>结果：</p>
-<p>A_SUM_QUANTITY    | B_SUM_QUANTITY    | C_SUM_QUANTITY    |D_SUM_QUANTITY<br>|—————|—————-|————-|———|<br>210     |90 |    160 |    90</p>
+<table>
+<thead>
+<tr>
+<th>A_SUM_QUANTITY</th>
+<th>B_SUM_QUANTITY</th>
+<th>C_SUM_QUANTITY</th>
+<th>D_SUM_QUANTITY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>210</td>
+<td>90</td>
+<td>160</td>
+<td>90</td>
+</tr>
+</tbody>
+</table>
 <p>如果用 PIVOT operator, 就简单了：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span>   (<span class="keyword">SELECT</span> product_code, quantity</span><br><span class="line">	        <span class="keyword">FROM</span>   pivot_test)</span><br><span class="line">	<span class="keyword">PIVOT</span>  (<span class="keyword">SUM</span>(quantity)  <span class="keyword">FOR</span> (product_code) </span><br><span class="line">			<span class="keyword">IN</span> (<span class="string">'A'</span> <span class="keyword">AS</span> a, <span class="string">'B'</span> <span class="keyword">AS</span> b, <span class="string">'C'</span> <span class="keyword">AS</span> c, <span class="string">'D'</span> <span class="keyword">AS</span> d));</span><br></pre></td></tr></table></figure>
 <p>注意:</p>
@@ -272,7 +289,7 @@ group by product_code order by 1;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://xueqiang.github.io/2016/05/16/PIVOT-and-UNPIVOT-Opertaters/" data-id="cio9xxebb0000vg9kqf07izcq" class="article-share-link">Delen</a>
+      <a data-url="http://xueqiang.github.io/2016/05/16/PIVOT-and-UNPIVOT-Opertaters/" data-id="cio9y2jun0000wq9kiwf11abu" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL-PIVOT-UNPIVOT/">SQL, PIVOT, UNPIVOT</a></li></ul>
@@ -310,7 +327,7 @@ group by product_code order by 1;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://xueqiang.github.io/2016/05/15/Hello-Hexo/" data-id="cio9xxebh0001vg9ku104317k" class="article-share-link">Delen</a>
+      <a data-url="http://xueqiang.github.io/2016/05/15/Hello-Hexo/" data-id="cio9y2jus0001wq9kgrzylnso" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -355,7 +372,7 @@ group by product_code order by 1;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://xueqiang.github.io/2016/03/12/hello-world/" data-id="cio9xxebo0003vg9kd7k1y01d" class="article-share-link">Delen</a>
+      <a data-url="http://xueqiang.github.io/2016/03/12/hello-world/" data-id="cio9y2juy0003wq9k3dud2tli" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -375,7 +392,7 @@ group by product_code order by 1;
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Labels</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL-PIVOT-UNPIVOT/">SQL, PIVOT, UNPIVOT</a></li></ul>
     </div>
@@ -385,7 +402,7 @@ group by product_code order by 1;
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
       <a href="/tags/SQL-PIVOT-UNPIVOT/" style="font-size: 10px;">SQL, PIVOT, UNPIVOT</a>
     </div>
@@ -394,7 +411,7 @@ group by product_code order by 1;
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archieven</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
     </div>
@@ -404,7 +421,7 @@ group by product_code order by 1;
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recente berichten</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -433,7 +450,7 @@ group by product_code order by 1;
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2016 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
